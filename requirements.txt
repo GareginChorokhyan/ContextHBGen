@@ -1,0 +1,18 @@
+# UI
+gradio>=4.0.0
+
+# Config
+python-dotenv
+
+# Document loaders
+langchain_community  # PDF (PyPDFLoader)
+python-docx          # DOCX
+
+# Outline (PDF TOC)
+PyMuPDF              # fitz in outlineService
+
+# Vector store
+supabase
+
+# LightRAG
+lightrag-hku
