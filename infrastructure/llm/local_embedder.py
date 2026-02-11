@@ -18,7 +18,6 @@ class LocalHashEmbedder:
             digest = hashlib.sha256(token.encode("utf-8")).digest()
             idx = digest[0] % self.dim
             vec[idx] += 1.0
-        # Normalize
         norm = sum(v * v for v in vec) ** 0.5
         if norm > 0:
             vec = [v / norm for v in vec]
