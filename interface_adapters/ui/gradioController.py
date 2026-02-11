@@ -666,11 +666,6 @@ def create_demo() -> gr.Blocks:
                     - Streaming responses for chat and handbook
                     - LightRAG + Supabase pgvector indexing
                     
-                    ---
-                    
-                    **Version**: 2.0  
-                    **Last Updated**: 2026  
-                    **License**: MIT
                 """)
         
         upload_btn.click(

@@ -35,6 +35,10 @@ python main.py
 - [Chat Processing](assets/video/chat_processing.mp4)
 - [Full Demo](assets/video/full_demo.mp4)
 
+## Full Demo
+
+https://github.com/user-attachments/assets/df7f2212-4ad4-46e4-8e6c-081e4e712b66
+
 ## Configuration / Environment Variables
 Create a `.env` file with your configuration. Use `cursor` markers below to replace values:
 ```env
@@ -65,6 +69,3 @@ SUPABASE_DB_MAX_CONNECTIONS=2
 LIGHTRAG_MAX_ASYNC=2
 LIGHTRAG_MAX_PARALLEL_INSERT=1
 ```
-
-## License
-MIT
