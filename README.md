@@ -12,6 +12,92 @@ A Gradio-based app that lets you upload PDF/DOCX/TXT documents, build a LightRAG
 - Streaming handbook generation with stop control
 - UI safeguards to prevent concurrent heavy requests
 
+## Architecture
+```mermaid
+flowchart TD
+    A[User] --> B[Gradio UI<br/>create_demo]
+    B --> C[IngestDocument use case]
+    C --> D[PathBasedLoader]
+    D --> E[PdfLoader / DocxLoader / TxtLoader]
+    C --> F[DocumentFactory]
+    C --> G[ChunkingService + ParagraphChunking]
+    C --> H[OutlineService]
+    C --> I[RagService]
+    I --> J[OpenRouterLLM embed]
+    I --> K[VectorStore Supabase]
+    I --> L[InMemoryVectorStore fallback]
+    B --> M[GenerateHandbook use case]
+    M --> I
+    M --> N[OpenRouterLLM generate]
+    B --> O[LightRagService optional]
+    O --> P[LightRAG + PG storage]
+    B --> Q[Chat flow]
+    Q --> O
+    Q --> I
+    Q --> N
+```
+
+## Class Dependency
+```mermaid
+classDiagram
+    class IngestDocument
+    class GenerateHandbook
+    class HandbookStructure
+    class RagService
+    class LightRagService
+    class DocumentFactory
+    class ChunkingService
+    class ParagraphChunking
+    class OutlineService
+    class OpenRouterLLM
+    class LocalHashEmbedder
+    class VectoreStore
+    class VectorStore
+    class InMemoryVectorStore
+    class DocumentLoader
+    class PathBasedLoader
+    class LoaderFactory
+    class PdfLoader
+    class DocxLoader
+    class TxtLoader
+    class Document
+    class Chunks
+    class Chunk
+    class Metadata
+
+    IngestDocument --> DocumentLoader : uses
+    IngestDocument --> ChunkingService : uses
+    IngestDocument --> OutlineService : uses
+    IngestDocument --> RagService : indexes
+    IngestDocument --> LightRagService : optional
+    IngestDocument --> DocumentFactory : creates
+    DocumentFactory --> Document : builds
+    Document --> Chunks : has
+    Chunks --> Chunk : contains
+    Chunk --> Metadata : has
+
+    ChunkingService --> ParagraphChunking : strategy
+    PathBasedLoader ..|> DocumentLoader
+    PdfLoader ..|> DocumentLoader
+    DocxLoader ..|> DocumentLoader
+    TxtLoader ..|> DocumentLoader
+    PathBasedLoader --> LoaderFactory : resolves loader
+    LoaderFactory --> PdfLoader
+    LoaderFactory --> DocxLoader
+    LoaderFactory --> TxtLoader
+
+    RagService --> OpenRouterLLM : embedder
+    RagService --> LocalHashEmbedder : fallback
+    RagService --> VectoreStore : vector store
+    VectorStore ..|> VectoreStore
+    InMemoryVectorStore ..|> VectoreStore
+
+    GenerateHandbook --> RagService : retrieves context
+    GenerateHandbook --> LightRagService : optional query
+    GenerateHandbook --> OpenRouterLLM : generates
+    HandbookStructure --> Document : reads outline
+```
+
 ## Installation
 ```bash
 python -m venv .venv
